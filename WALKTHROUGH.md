@@ -1,4 +1,4 @@
-# Brisk VS Code extension
+# Brisk VS Code extension 5 minute Development Speedrun 
 
 ## Getting Started
 
@@ -13,13 +13,16 @@ I get something working and then I iterate on the solution without throwing out 
 ### Why
 
 Brisk runs your tests really fast and it can run from your developer environment running your entire test suite in the cloud on every single save. The demo of react that we use finishes in 12 seconds that is fast enough to run your test suite every time you save.
-Lets make the Brisk VS Code extension to enable that behaviour and learn a little bit about how VS Code extensions work.
+Lets make the Brisk VS Code extension to enable that behaviour and learn a little bit about how VS Code extensions work in the process.
 
-It's pretty neat!
+They are pretty neat!
+
+
+# Lets Get Started
 
 ### Create the extension
 
-```
+```shell
 npx --package yo --package generator-code -- yo code
 ```
 
@@ -56,14 +59,14 @@ Now we want to change the command name
 I'm going to change it to be "helloPeacefulWorld"
 
 so I change
-```
+```typescript
 	let disposable = vscode.commands.registerCommand('brisk.helloPeacefulWorld', () => {
 ```
     
 in the extension
 
 and in package.json
-```
+```json
   "commands": [
       {
         "command": "brisk.helloPeacefulWorld",
@@ -82,7 +85,7 @@ Still has the command as Hello World...
 ..ok
 
 maybe I need to also change the title in the package.json
-```
+```json
     "commands": [
       {
         "command": "brisk.helloPeacefulWorld",
@@ -103,7 +106,7 @@ So, two main things we want to do now.
 
 ###  Lets change the name to Run Brisk
 
-```
+```json
     "commands": [
       {
         "command": "brisk.run",
@@ -112,7 +115,7 @@ So, two main things we want to do now.
     ]
 ```
 and in extension.ts
-```
+```typescript
 	let disposable = vscode.commands.registerCommand('brisk.run', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
@@ -122,20 +125,8 @@ and in extension.ts
 
 ### Lets figure out how to run a shell command
 
-Lets execute ls and write the output to the output
-
--- error
-
-if you don't see any output click the crossed wrenches in the bottom toolbar - 
-click show running tasks
-
-For me the output tab shows
-
-Error: Invalid problemMatcher reference: $esbuild-watch
-
-
-It works on restart now - and running the command
-``` 
+Apparently Terminal what we are interested in and "sendText()" sends content to the Terminal. Lets incorporate that.
+```typescript
 
 
 	vscode.window.onDidChangeActiveTerminal(e => {
@@ -161,14 +152,14 @@ It works on restart now - and running the command
 
 	});
 
-	```
+```
 
 # Settings
 
 
 Now lets add the code for the settings into the activation
 
-``` Typescript
+```typescript
 export function activate(context: vscode.ExtensionContext) {
   // Use the console to output diagnostic information (console.log) and errors (console.error)
   // This line of code will only be executed once when your extension is activated
@@ -247,7 +238,7 @@ Ok that didn't work, I can't find my extensions settings anywhere.
 
 From Stack Overflow
 
-```
+```json
 "configuration": {
     "title": "Just a title",
     "properties": {
@@ -265,7 +256,7 @@ Makes sense, I need to define the config of my extension in the package.json fir
 
 ok So updating this
 
-```
+```json
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
@@ -295,14 +286,13 @@ ok So updating this
 
   I'm restarting the extension each time which for the moment kicks off a new run of brisk on each activation - we'll change that in a bit but for now you can just kill the output or wait for it to finish.
 
-  -- Lets change the default file and see if it updates
-  I'm going to change it to 
+### Changing a Setting
+
+  Lets change the default file and see if it updates, I'm going to change it to 
+  
   brisk-ci.json
 
-
-  Yes - although I needed to restart the extension in order for it to update. 
-
-  So I updated it and waited for the console output - I got output to say we were updating but it still had the old value there hmmmm..
+  So I updated it and waited for the console output - I got output to say we were updating but it still had the old value there hmmmm....
 
   Lets change it again and see if it is just always showing the last one or always shows the same output
 
@@ -313,7 +303,7 @@ ok So updating this
 
 Ahhhh the config needs to be refetched after the event gets in, I assumed the config would automatically update but not so.
 
-```
+```typescript
 
   // Load user settings
   let config = vscode.workspace.getConfiguration();
@@ -351,7 +341,7 @@ So it seems like we are going to need to check the config all the time or run th
 Maybe we just grab the values when we need them - to simplify everything.
 
 
-```
+```typescript
   let disposable = vscode.commands.registerCommand("brisk.run", () => {
     // The code you place here will be executed every time your command is executed
     // Display a message box to the user
@@ -385,6 +375,18 @@ We then run it once and make sure the default setting is used. Then we can updat
 
 We also switched to CI mode so that we don't watch by passing BRISK_CI=true to the command.
 
+Lets also add a configuration setting for the API server so that people can point the CLI at their own backend
+
+This now becomes
+
+```typescript
+
+	  let apiEndpoint = config.get("brisk.apiEndpoint", "");
+
+      terminal.sendText(
+        `cd ${workspaceFolder} && BRISK_APIENDPOINT=${apiEndpoint} BRISK_CI=true brisk -c ${configFile}`
+      );
+```      
 
 # On Save
 
@@ -392,7 +394,7 @@ Now we'd like to run the command on every save.
 
 Lets update the contribues part of the package.json to let VS Code know about our keybindings. It looks like it takes a keybindings field, so lets see if we can put something there. 
 
-```
+```json
   "contributes": {
     "commands": [
       {
@@ -429,7 +431,7 @@ Lets update the contribues part of the package.json to let VS Code know about ou
 
   The extension.ts now looks like
 
-  ```
+  ```typescript
   // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
@@ -502,7 +504,7 @@ So what does all this look like - to extension.js
 
 
 
-```
+```typescript
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
@@ -589,12 +591,13 @@ We also want to make the extension active whenever there is a brisk config in th
 
 We add this to our package.json
 ,
+```json
   "activationEvents": [
     "onCommand:brisk.run",
     "workspaceContains:**/brisk.json"
   ]
   },
-
+```
 
 
 
@@ -602,9 +605,11 @@ Great that seems to all work pretty well - lets see how we publish it
 
 https://code.visualstudio.com/api/working-with-extensions/publishing-extension
 
+I need to create an org in Azure devops and generate a security token.
+
 Turns out we need to use a tool called vsce which we install with 
 
-```
+```shell
 npm install -g @vscode/vsce
 ```
 

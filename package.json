@@ -1,6 +1,16 @@
 {
   "name": "brisk",
   "displayName": "Brisk",
+  "author": {
+    "name": "Brisk Inc",
+    "email": "support@brisktest.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brisktest/brisk-extension"
+  },
+  "license": "Apache-2.0",
+  "publisher": "Brisk",    
   "description": "This extension integrates with the Brisk CI system allowing you to  run your tests (and adhoc commands) against your cloud based workers from your IDE. The default configuration is to run your complete test suite every time you save.",
   "version": "0.0.1",
   "engines": {

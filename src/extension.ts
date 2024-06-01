@@ -46,8 +46,10 @@ export function activate(context: vscode.ExtensionContext) {
         defaultSettings["brisk.configFile"]
       );
 
+	  let apiEndpoint = config.get("brisk.apiEndpoint", "");
+
       terminal.sendText(
-        `cd ${workspaceFolder} && BRISK_CI=true brisk -c ${configFile}`
+        `cd ${workspaceFolder} && BRISK_APIENDPOINT=${apiEndpoint} BRISK_CI=true brisk -c ${configFile}`
       );
       terminal.show(true);
       terminal.processId.then((pid) => {
@@ -59,7 +61,6 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(disposable);
 }
-
 
 function getWorkspaceFolder(): string {
   const folders = vscode.workspace.workspaceFolders;
@@ -73,8 +74,7 @@ function getWorkspaceFolder(): string {
   return "";
 }
 
-
 // This method is called when your extension is deactivated
 export function deactivate() {
-	  console.log('Extension Brisk is now deactivated!');
+  console.log("Extension Brisk is now deactivated!");
 }
