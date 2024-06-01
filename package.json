@@ -1,0 +1,71 @@
+{
+  "name": "brisk",
+  "displayName": "Brisk",
+  "description": "This extension integrates with the Brisk CI system allowing you to  run your tests (and adhoc commands) against your cloud based workers from your IDE. The default configuration is to run your complete test suite every time you save.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.89.0"
+  },
+  "categories": [
+    "Other"
+  ],
+"activationEvents": [
+    "workspaceContains:**/brisk*json"
+  ],
+  "main": "./dist/extension.js",
+
+  "contributes": {
+    "commands": [
+      {
+        "command": "brisk.run",
+        "title": "Run Brisk"
+      }
+    ],
+
+    "configuration": {
+      "title": "General",
+      "properties": {
+          "brisk.configFile": {
+              "type": "string",
+              "default": "brisk.json",
+              "description": "The project configuration file to use for Brisk"
+          }
+      }
+  },
+  "keybindings": [
+    {
+      "command": "brisk.run",
+      "key": "ctrl+s",
+      "mac": "cmd+s",
+      "when": "editorTextFocus"
+    }
+  ]
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run package",
+    "compile": "yarn run check-types && yarn run lint && node esbuild.js",
+    "watch": "npm-run-all -p watch:*",
+    "watch:esbuild": "node esbuild.js --watch",
+    "watch:tsc": "tsc --noEmit --watch --project tsconfig.json",
+    "package": "yarn run check-types && yarn run lint && node esbuild.js --production",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "check-types": "tsc --noEmit",
+    "lint": "eslint src --ext ts",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.89.0",
+    "@types/mocha": "^10.0.6",
+    "@types/node": "18.x",
+    "@typescript-eslint/eslint-plugin": "^7.7.1",
+    "@typescript-eslint/parser": "^7.7.1",
+    "eslint": "^8.57.0",
+    "esbuild": "^0.20.2",
+    "npm-run-all": "^4.1.5",
+    "typescript": "^5.4.5",
+    "@vscode/test-cli": "^0.0.9",
+    "@vscode/test-electron": "^2.3.9"
+  }
+}
