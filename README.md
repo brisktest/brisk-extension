@@ -1,19 +1,23 @@
 # Brisk VS Code extension
 
-- getting started
+## Getting Started
 
-vs code extension in 5 minutes
+### What
 
--- philosophy  - tracer bullets
+VS Code extension in 5 minutes
+
+### Philosophy  - Tracer Bullets
 
 I get something working and then I iterate on the solution without throwing out prototypes
 
--- Why
+### Why
 
 Brisk runs your tests really fast and it can run from your developer environment running your entire test suite in the cloud on every single save. The demo of react that we use finishes in 12 seconds that is fast enough to run your test suite every time you save.
 Lets make the Brisk VS Code extension to enable that behaviour and learn a little bit about how VS Code extensions work.
 
 It's pretty neat!
+
+### Create the extension
 
 ```
 npx --package yo --package generator-code -- yo code
@@ -30,31 +34,31 @@ Inside the editor, open src/extension.ts and press F5 or run the command Debug: 
 Run the Hello World command from the Command Palette (⇧⌘P) in the new window:
 
 
--- 
+
+### Running the extension
+
 So the process here is to go to the extension and run it - this will create a new vs code window where your extension is active. 
-You can then call the command you specified in the command palette (in this case hello world) and it will show up on the bottom as a notification - do that. 
+You can then call the command you specified in the command palette (in this case hello world) and it will show up on the bottom as a notification - do that. This is going to be our developing loop for the next while. 
 
--- this is going to be our loop for the next while
-
--- First thing - change the output
+### First thing - change the output
 
 I'm changing to 
 
-
 vscode.window.showInformationMessage('Hello Peaceful World from Brisk!');
 
-lets save
-restart - go to the second window and run "Hello World in the command palette"
+let us save
+no restart - go to the second window and run "Hello World in the command palette"
 
--- Great that works.
+### Great that works.
 
 Now we want to change the command name
 
 I'm going to change it to be "helloPeacefulWorld"
 
 so I change
-
+```
 	let disposable = vscode.commands.registerCommand('brisk.helloPeacefulWorld', () => {
+```
     
 in the extension
 
@@ -77,45 +81,46 @@ Still has the command as Hello World...
 
 ..ok
 
-maybe I need to also change the title
-
+maybe I need to also change the title in the package.json
+```
     "commands": [
       {
         "command": "brisk.helloPeacefulWorld",
         "title": "Hello Peaceful World"
       }
     ]
-
+```
 
 
 Yes!
 
 So, two main things we want to do now. 
 
-Figure out how to run a command instead of printing
-Figure out how to execute our command on save 
+
+- Figure out how to run a command instead of printing
+- Figure out how to execute our command on save 
 
 
--- Lets change the name to Run Brisk
+###  Lets change the name to Run Brisk
 
-
+```
     "commands": [
       {
         "command": "brisk.run",
         "title": "Run Brisk"
       }
     ]
-
+```
 and in extension.ts
-
+```
 	let disposable = vscode.commands.registerCommand('brisk.run', () => {
 		// The code you place here will be executed every time your command is executed
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello Peaceful World from Brisk!');
 	});
+```
 
-
--- Lets figure out how to run a shell command
+### Lets figure out how to run a shell command
 
 Lets execute ls and write the output to the output
 
@@ -158,22 +163,7 @@ It works on restart now - and running the command
 
 	```
 
-  -- activation event
-
-  ...
-"activationEvents": [
-    "workspaceContains:**/brisk.json"
-]
-...
-
--- key bindings
-https://code.visualstudio.com/docs/getstarted/keybindings#_advanced-customization
-
-
--- next lets access the settings
-
-
-
+# Settings
 
 
 Now lets add the code for the settings into the activation
@@ -243,14 +233,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(disposable);
 }
-
 ```
 
-
-
-Where is the console actually displayed?
-
-Open vscode and go to menu "Help"->"Toggle Developer Tools" and the console is displayed on the right 
+> **_NOTE:_** We are writing to the console, where is the console actually displayed?
+              Open vscode and go to menu "Help"->"Toggle Developer Tools" and the console is displayed on the right 
 
 
 Check the console - see if we are outputing the correct config file? 
@@ -322,14 +308,10 @@ ok So updating this
 
   So I change it to "someothername.json"
 
-  Nope it keeps printing the first value it loaded with, even though it knows it got updated
+  Nope it keeps printing the first value it loaded with, even though it knows it got updated cause it called the handler.
 
 
-ok weird - lets just output the event to make sure it makes sense
-		console.log("Brisk: User setting changed event is ", JSON.stringify(event))
-
-
-Ahhhh the config needs to be refetched after the even gets in.
+Ahhhh the config needs to be refetched after the event gets in, I assumed the config would automatically update but not so.
 
 ```
 
@@ -400,11 +382,13 @@ Maybe we just grab the values when we need them - to simplify everything.
 ```
 
 We then run it once and make sure the default setting is used. Then we can update the config and run the command again using the command palette and we see our updated config file in the terminal. Success!
+
 We also switched to CI mode so that we don't watch by passing BRISK_CI=true to the command.
 
 
+# On Save
 
-No we'd like to run the command on every save. 
+Now we'd like to run the command on every save. 
 
 Lets update the contribues part of the package.json to let VS Code know about our keybindings. It looks like it takes a keybindings field, so lets see if we can put something there. 
 
@@ -441,6 +425,7 @@ Lets update the contribues part of the package.json to let VS Code know about ou
   Nope that doesn't seem to work...
 
   ahhh weird - it works but not in the extension window - it works in the VS Code where I'm calling the extension from. Maybe that is all we need.
+  Seems like on reload it's working in the extension window - some weirdness but we seem to be on the right track.
 
   The extension.ts now looks like
 
