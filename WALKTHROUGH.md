@@ -4,16 +4,13 @@
 
 ### What
 
-VS Code extension in 5 minutes
-
-### Philosophy  - Tracer Bullets
-
-I get something working and then I iterate on the solution without throwing out prototypes
+VS Code extension for Brisk
 
 ### Why
 
 Brisk runs your tests really fast and it can run from your developer environment running your entire test suite in the cloud on every single save. The demo of react that we use finishes in 12 seconds that is fast enough to run your test suite every time you save.
-Lets make the Brisk VS Code extension to enable that behaviour and learn a little bit about how VS Code extensions work in the process.
+
+Lets make the Brisk VS Code extension to enable that behavior and learn a little bit about how VS Code extensions work in the process.
 
 They are pretty neat!
 
