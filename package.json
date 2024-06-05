@@ -13,7 +13,7 @@
   "license": "Apache-2.0",
   "publisher": "Brisk",    
   "description": "This extension integrates with the Brisk CI system allowing you to  run your tests (and adhoc commands) against your cloud based workers from your IDE. The default configuration is to run your complete test suite every time you save.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "engines": {
     "vscode": "^1.89.0"
   },
