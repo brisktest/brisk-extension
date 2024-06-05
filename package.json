@@ -40,6 +40,11 @@
               "type": "string",
               "default": "brisk.json",
               "description": "The project configuration file to use for Brisk"
+          },
+          "brisk.apiEndpoint": {
+              "type": "string",
+              "default": "api.brisktest.com:50052",
+              "description": "The API endpoint to use for Brisk"
           }
       }
   },

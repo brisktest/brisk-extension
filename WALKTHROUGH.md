@@ -40,16 +40,16 @@ Run the Hello World command from the Command Palette (⇧⌘P) in the new window
 So the process here is to go to the extension and run it - this will create a new vs code window where your extension is active. 
 You can then call the command you specified in the command palette (in this case hello world) and it will show up on the bottom as a notification - do that. This is going to be our developing loop for the next while. 
 
-### First thing - change the output
+### First thing - Change the Output
 
-I'm changing to 
+We'll make a small change to the output to make sure that all of the build system is working and that hte modifications we are making are getting built and executed when we load the extension.
 
 ```typescript
 vscode.window.showInformationMessage('Hello Peaceful World from Brisk!');
 ```
 
 
-now restart - go to the second window and run "Hello World" in the command palette
+Now we restart and go to the second window and run "Hello World" in the command palette. 
 
 ![It works](https://github.com/brisktest/brisk-extension/blob/main/images/hello-peaceful-world.png?raw=true)
 
@@ -127,9 +127,9 @@ and in extension.ts
 
 ### Lets figure out how to run a shell command
 
-Apparently Terminal what we are interested in and "sendText()" sends content to the Terminal. Lets incorporate that.
-```typescript
+Apparently Terminal is what we are interested in and "sendText()" sends content to the Terminal. Lets incorporate that.
 
+```typescript
 
 	vscode.window.onDidChangeActiveTerminal(e => {
 		console.log(`Active terminal changed, name=${e ? e.name : 'undefined'}`);
@@ -233,6 +233,9 @@ export function activate(context: vscode.ExtensionContext) {
 
 
 Check the console - see if we are outputing the correct config file? 
+
+
+
 Yea great. Lets see if we can change it now
 
 My first instinct is to check the settings.json
@@ -302,8 +305,10 @@ ok So updating this
 
   Nope it keeps printing the first value it loaded with, even though it knows it got updated cause it called the handler.
 
+  [What is going on here!](https://github.com/brisktest/brisk-extension/blob/main/images/confusing-terminal-output.png?raw=true)
 
-Ahhhh the config needs to be refetched after the event gets in, I assumed the config would automatically update but not so.
+
+  Ahhhh the config needs to be refetched after the event gets in, I assumed the config would automatically update but not so.
 
 ```typescript
 
@@ -377,7 +382,7 @@ We then run it once and make sure the default setting is used. Then we can updat
 
 We also switched to CI mode so that we don't watch by passing BRISK_CI=true to the command.
 
-Lets also add a configuration setting for the API server so that people can point the CLI at their own backend
+Lets also add a configuration setting for the API server so that people can point the CLI at their own backend.
 
 This now becomes
 
@@ -389,6 +394,8 @@ This now becomes
         `cd ${workspaceFolder} && BRISK_APIENDPOINT=${apiEndpoint} BRISK_CI=true brisk -c ${configFile}`
       );
 ```      
+
+We also need to make sure and update the pacakge.json to let it know about the setting so it will show in the docs when we install it.
 
 # On Save
 
@@ -429,11 +436,12 @@ Lets update the contribues part of the package.json to let VS Code know about ou
   Nope that doesn't seem to work...
 
   ahhh weird - it works but not in the extension window - it works in the VS Code where I'm calling the extension from. Maybe that is all we need.
+
   Seems like on reload it's working in the extension window - some weirdness but we seem to be on the right track.
 
   The extension.ts now looks like
 
-  ```typescript
+```typescript
   // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
@@ -487,9 +495,6 @@ function getWorkspaceFolder(): string {
   vscode.window.showErrorMessage(message);
   return "";
 }
-
-
-
 ```
 
 There is one final piece of the puzzle. 
