@@ -13,7 +13,7 @@
   "license": "Apache-2.0",
   "publisher": "Brisk",    
   "description": "This extension integrates with the Brisk CI system allowing you to  run your tests (and adhoc commands) against your cloud based workers from your IDE. The default configuration is to run your complete test suite every time you save.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "engines": {
     "vscode": "^1.89.0"
   },
@@ -43,18 +43,18 @@
           },
           "brisk.apiEndpoint": {
               "type": "string",
-              "default": "api.brisktest.com:50052",
+              "default": "",
               "description": "The API endpoint to use for Brisk"
-          }
+          },
+          "brisk.languages": {
+              "type": "array",
+              "default":["javascript","javascriptreact", "typescript", "python","ruby","haml","html","css","scss","sass"],
+              "description": "The languages of the files that once saved will trigger a brisk run"
+          },
       }
   },
   "keybindings": [
-    {
-      "command": "brisk.run",
-      "key": "ctrl+s",
-      "mac": "cmd+s",
-      "when": "editorTextFocus"
-    }
+   
   ]
   },
   "scripts": {

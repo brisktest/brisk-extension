@@ -630,6 +630,27 @@ $ vsce package
 $ vsce publish
 # <publisher id>.myExtension published to VS Code Marketplace
 ```
+
+# A Bugfix
+
+After playing around with the extension for a while it became apparent that using the keybinding for Ctrl+s meant that nobody else got to use the key binding and so saving was being interrupted, so I modified it to use the onSave handler for the workspace, which to be honest is a much better solution. I added a config setting for the acceptable languages and then on save of one of those languages we call the command. Here is the relevant code
+
+```typescript
+workspace.onDidSaveTextDocument((document: TextDocument) => {
+  const config = vscode.workspace.getConfiguration();
+  if (config.get("brisk.languages",defaultSettings["brisk.languages"]).includes(document.languageId) && document.uri.scheme === "file") {
+    vscode.commands.executeCommand("brisk.run");
+  }
+});
+```
+
+And the defaultSettings now become
+```typescript
+  "brisk.languages": ["javascript","javascriptreact", "typescript", "python","ruby","haml","html","css","scss","sass"],
+```
+
+I also updated the package.json to add the new default setting and remove the old keybinding.
+
 # Next steps
 
 - Brisk can run one off commands against your build servers, e.g. running linters or tsc against your codebase. Add this functionality.

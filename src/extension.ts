@@ -2,17 +2,22 @@
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from "vscode";
 import * as childProcess from "child_process";
+import { TextDocument, workspace } from "vscode";
 
 var NEXT_TERM_ID = 1;
 var latestRun = 0;
+  // Define default settings
+  const defaultSettings = {
+    "brisk.configFile": "brisk.json",
+    "brisk.apiEndpoint": "",
+    "brisk.languages": ["javascript","javascriptreact", "typescript", "python","ruby","haml","html","css","scss","sass"],
+
+  };
 
 export function activate(context: vscode.ExtensionContext) {
   console.log('Congratulations, your extension "brisk" is now active!');
 
-  // Define default settings
-  const defaultSettings = {
-    "brisk.configFile": "brisk.json",
-  };
+
 
   let runningTerminalProcess: number | undefined;
 
@@ -61,6 +66,13 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(disposable);
 }
+
+workspace.onDidSaveTextDocument((document: TextDocument) => {
+  const config = vscode.workspace.getConfiguration();
+  if (config.get("brisk.languages",defaultSettings["brisk.languages"]).includes(document.languageId) && document.uri.scheme === "file") {
+    vscode.commands.executeCommand("brisk.run");
+  }
+});
 
 function getWorkspaceFolder(): string {
   const folders = vscode.workspace.workspaceFolders;
