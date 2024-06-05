@@ -44,10 +44,15 @@ You can then call the command you specified in the command palette (in this case
 
 I'm changing to 
 
+```typescript
 vscode.window.showInformationMessage('Hello Peaceful World from Brisk!');
+```
 
-let us save
-no restart - go to the second window and run "Hello World in the command palette"
+
+now restart - go to the second window and run "Hello World" in the command palette
+
+![It works](https://github.com/brisktest/brisk-extension/blob/main/images/hello-peaceful-world.png?raw=true)
+
 
 ### Great that works.
 
