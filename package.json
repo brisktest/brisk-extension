@@ -50,7 +50,7 @@
               "type": "array",
               "default":["javascript","javascriptreact", "typescript", "python","ruby","haml","html","css","scss","sass"],
               "description": "The languages of the files that once saved will trigger a brisk run"
-          },
+          }
       }
   },
   "keybindings": [
