@@ -630,4 +630,6 @@ $ vsce package
 $ vsce publish
 # <publisher id>.myExtension published to VS Code Marketplace
 ```
+# Next steps
 
+- Brisk can run one off commands against your build servers, e.g. running linters or tsc against your codebase. Add this functionality.

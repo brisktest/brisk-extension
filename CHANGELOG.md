@@ -6,8 +6,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [0.0.4]
 - Update this changelog
+
 ## [0.0.3]
 - Add the apiEndpoint setting to the package.json
+
 ## [0.0.2]
 - Add the logo icon
 
