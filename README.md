@@ -12,4 +12,4 @@ Find out more about Brisk at https://github.com/brisktest/brisk and for a hosted
 
 ### This Extension is available to install in VS Code. Search for Brisk. 
 
-### Interested in how this extension was made, you can see the 5 minute speed run walkthrough at https://github.com/brisktest/brisk-extension/blob/main/WALKTHROUGH.md
+### Interested in how this extension was made, you can see the 5 minute speed run walkthrough at https://github.com/brisktest/brisk-extension/blob/main/SPEEDRUN.md
